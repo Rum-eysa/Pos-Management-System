@@ -1,0 +1,296 @@
+<?php
+
+require_once('config/connect.php');
+$query= "SELECT * FROM test";
+$reslut=mysqli_query($conn,$query);
+?>
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="tr TR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>deneme7</title>
+    <link rel="stylesheet" href="css/deneme.css">
+    <link type="image/png" rel="icon"sizes="360x360" href="images/favicon.png">
+    <meta name="robots" content="index, follow, noarchive">
+    <meta name="revisit-after" content="7 Days" >
+
+
+</head>
+<body>
+    <nav>
+        <div class="nav-bar">
+            <i class='bx bx-menu sidebarOpen' ></i>
+            <span class="logo navLogo"><a href="#">MarketX</a></span>
+            <div class="menu">
+                <div class="logo-toggle">
+                    <span class="logo"><a href="#">MarketX</a></span>
+                    <i class='bx bx-x siderbarClose'></i>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#" data-target="menu/Kasa/Kasa.html">Kasa</a></li>
+                    <li><a href="#" data-target="menu/StokGirişi/StokGirişi.html">Stok Girişi</a></li>
+                    <li><a href="#" data-target="menu/Rapor/Rapor.html">Rapor</a></li>
+                    <li><a href="#" data-target="menu/Klavye/Klavye.html">Klavye</a></li>
+                    <li><a href="#" data-target="menu/CariTahsilat/CariTahsilat.html">Cari Tahsilat</a></li>
+                </ul>
+            </div>
+            <div class="darkLight-searchBox">
+                <div class="dark-light">
+                    <i class='bx bx-moon moon'></i>
+                    <i class='bx bx-sun sun'></i>
+                </div>
+                <div class="searchBox">
+                   <div class="searchToggle">
+                    <i class='bx bx-x cancel'></i>
+                    <i class='bx bx-search search'></i>
+                   </div>
+                    <div class="search-field">
+                        <input type="text" placeholder="Search...">
+                        <i class='bx bx-search'></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+        <script>
+        const body = document.querySelector("body"),
+              nav = document.querySelector("nav"),
+              modeToggle = document.querySelector(".dark-light"),
+              searchToggle = document.querySelector(".searchToggle"),
+              sidebarOpen = document.querySelector(".sidebarOpen"),
+              siderbarClose = document.querySelector(".siderbarClose");
+              let getMode = localStorage.getItem("mode");
+                  if(getMode && getMode === "dark-mode"){
+                    body.classList.add("dark");
+                  }
+             // js code to toggle dark and light mode
+              modeToggle.addEventListener("click" , () =>{
+                modeToggle.classList.toggle("active");
+                body.classList.toggle("dark");
+                // js code to keep user selected mode even page refresh or file reopen
+                if(!body.classList.contains("dark")){
+                    localStorage.setItem("mode" , "light-mode");
+                }else{
+                    localStorage.setItem("mode" , "dark-mode");
+                }
+              });
+              // js code to toggle search box
+                searchToggle.addEventListener("click" , () =>{
+                searchToggle.classList.toggle("active");
+              });
+         
+                
+            //   js code to toggle sidebar
+            sidebarOpen.addEventListener("click" , () =>{
+                nav.classList.add("active");
+            });
+            body.addEventListener("click" , e =>{
+                let clickedElm = e.target;
+                if(!clickedElm.classList.contains("sidebarOpen") && !clickedElm.classList.contains("menu")){
+                    nav.classList.remove("active");
+                }
+            });
+
+        
+        </script>
+
+    
+    <div class="container">
+
+        <div class="left">
+            <h3>Ürün Ekle</h3>
+            <div class="product-form">
+                <input type="text" id="product-barcode" placeholder="Ürün Barkodu">
+                <input type="text" id="product-name" placeholder="Ürün Adı">
+                <input type="text" id="product-image" placeholder="Resim Yolu">
+                <button onclick="addProduct()">Ürün Ekle</button>
+            </div>
+            <div class="product-buttons" id="product-buttons">
+                <!-- Ürün butonları burada olacak -->
+                
+            </div>
+            
+        
+            
+            <div id="product-list">
+                <!-- Eklenen ürünler burada gösterilecek -->
+            </div>
+
+            
+            <!-- Sol Sütun İçeriği -->
+        </div>
+        <div class="splitter" id="splitter"></div>
+        <div class="middle">
+            
+            <!-- Orta Sütun İçeriği -->
+
+            <!--üst kısım -->
+            <div class="upside">
+                <div class="barcode">
+                    <h3>Nakit</h3>
+                    <button onclick="searchProduct()">...</button>
+                    <input type="text" id="barcode" placeholder="Barkod" />
+                </div>
+                
+                <div class="amount">
+                    <h3 id="amount">Miktar</h3>
+                    <input type="number" id="quantity" value="1" min="1" />
+                </div>
+
+                <div class="total">
+                    <h3>Toplam Tutar :</h3>
+                    <input type="text" id="totalAmount" placeholder="" value=""/>
+                     TL
+                </div>
+
+                <div class="clear">
+                    <button onclick="clearInvoice()">Faturayı Sil</button>
+                    <button onclick="removeFromList()">Listeden Sil</button>
+                </div>
+               
+            </div>
+
+
+
+
+            <!-- Kasa seçimi -->
+            <div class="kasa">
+                <button onclick="selectKasa(1)">Kasa-1 (F1)</button>
+                <button onclick="selectKasa(2)">Kasa-2 (F2)</button>
+            </div>
+    
+            <!-- tablo kısmı -->
+            <div class=" data-grid">    <!--(section data-grid) şeklindeydi-->
+                <table id="product-table">
+                    <thead>
+                        <tr>
+                            <th>Barkod</th>
+                            <th>Ürün Adı</th>
+                            <th>Miktar</th>
+                            <th>Fiyat</th>
+                            <th>Tutar</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody id="product-table-body">
+                       
+                        <!-- veri tabanı Ürün verileri burada gösterilecek -->
+                    </tbody>
+                </table>
+            </div>
+
+            
+        <!-- favori ürünler kısmı -->
+        <div class="favorite-products" >
+        <div class="upper">
+                <h3>Favori Ürünler</h3>
+                <div class="button-container">
+                    <button onclick="showPreviousSales('left')">&lt;</button>
+                    <button onclick="showPreviousSales('right')">&gt;</button>
+                </div>
+        </div>
+            <div id="favorite-products-list">
+                <!-- Favorite products will be listed here -->
+            </div>
+        </div>
+                 
+
+
+        </div>
+
+
+
+
+
+
+        <div class="right">
+            
+            <!-- Sağ Sütun İçeriği -->
+
+            <div class="wage">
+                <span>Toplam Ücret:</span>
+                <p id="total-amount">₺0.00</p>
+            </div>
+        
+            <div class="payment-type">
+                <button class="payment-button cash">NAKİT (F3)</button>
+                <button class="payment-button visa">VISA (F4)</button>
+                <button class="payment-button account">C.HESAP (F5)</button>
+            </div>
+        
+            <div class="payment">
+                <p>Verilen Para: <input type="number" id="myNumber" min="0"></p>
+                <p>Para Üstü: <span id="para-ustu">50</span></p>
+            </div>
+        
+            <div class="whole">
+                <div class="money-images">
+                    <img src="money/whole/5tl.png" alt="5 TL">
+                    <img src="money/whole/10tl.png" alt="10 TL">
+                    <img src="money/whole/20tl.png" alt="20 TL">
+                    <img src="money/whole/50tl.png" alt="50 TL">
+                    <img src="money/whole/100tl.png" alt="100 TL">
+                    <img src="money/whole/200tl.png" alt="200 TL">
+                </div>
+            </div>
+        
+            <div class="pennies">
+                <div class="money-pennies-images">
+                    <img src="money/pennies/100krş.png" alt="100 kuruş">
+                    <img src="money/pennies/50krş.png" alt="50 kuruş">
+                    <img src="money/pennies/25krş.png" alt="25 kuruş">
+                    <img src="money/pennies/10krş.png" alt="10 kuruş">
+                    <img src="money/pennies/5krş.png" alt="5 kuruş">
+                    <img src="money/pennies/1krş.png" alt="1 kuruş">
+                </div>
+            </div>
+        
+            <div class="receipt">
+                <button class="receipt-button new-receipt">YENİ FİŞ (F6)</button>
+                <button class="receipt-button print-receipt">FİŞ YAZDIR (F5)</button>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+    
+    <script src="deneme.js"></script>
+</body>
+</html>
