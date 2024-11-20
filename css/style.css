@@ -920,7 +920,7 @@ width: 10px;
 
 .payment-button {
     flex: 1;
-    padding: 15px;
+    padding: 13px;
     font-size: 16px;
     color: white;
     border: none;
@@ -955,7 +955,7 @@ width: 10px;
 /*ödeme kısmı*/
 .payment{
     
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     text-align: start;
 }
@@ -1064,7 +1064,7 @@ width: 10px;
 
 .receipt-button {
     flex: 1;
-    padding: 15px;
+    padding: 10px;
     color: white;
     border: none;
     cursor: pointer;
