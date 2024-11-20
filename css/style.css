@@ -920,8 +920,8 @@ width: 10px;
 
 .payment-button {
     flex: 1;
-    padding: 13px;
-    font-size: 16px;
+    padding: 10px;
+    font-size: 14px;
     color: white;
     border: none;
     cursor: pointer;
